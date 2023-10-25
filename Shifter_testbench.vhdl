@@ -35,8 +35,8 @@ begin
     shift_asr <= '0';
     shift_ror <= '0';
     shift_rrx <= '0';
-    shift_val <= "00011";  -- No shift
-    din <= "01010101010101010101010101010101"; -- Example input data
+    shift_val <= "00000";  -- No shift
+    din <= x"00000001"; -- Example input data
     cin <= '0';
     vdd <= '1';
     vss <= '0';
@@ -50,24 +50,24 @@ begin
     wait for 10 ns;
     shift_lsl <= '0';
     shift_lsr <= '1';
-    shift_val <= "00011";  -- Shift by 2 bits
+    shift_val <= "00000";  -- Shift by 2 bits
 
     -- Test ASR
     wait for 10 ns;
     shift_lsr <= '0';
     shift_asr <= '1';
-    shift_val <= "00011";  -- Shift by 2 bits
+    shift_val <= "00000";  -- Shift by 2 bits
     vdd <= '1';
     vss <= '0';
     wait for 10 ns;
     shift_asr <= '0';
     shift_ror <= '1';
-    shift_val <= "00011";  -- Shift by 2 bits
+    shift_val <= "00000";  -- Shift by 2 bits
 
     wait for 10 ns;
     shift_ror <= '0';
     shift_rrx <= '1';
-    shift_val <= "00011";  -- Shift by 2 bits
+    shift_val <= "00000";  -- Shift by 2 bits
 
     wait for 10 ns;
     shift_rrx <= '0';

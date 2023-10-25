@@ -30,23 +30,31 @@ begin
     begin
 
         
-        
-        if shift_lsl = '1' then
-            temp := din((31-temp_shift_val) downto 0) & zeros(temp_shift_val-1 downto 0);
-        elsif shift_lsr = '1' then
-            temp := zeros(temp_shift_val-1 downto 0) & din(31 downto temp_shift_val);
-        elsif shift_asr = '1' then 
-            if din(31) = '1' then
-            temp := not zeros(temp_shift_val-1 downto 0) & din(31 downto temp_shift_val);
-            else
-            temp := zeros(temp_shift_val-1 downto 0) & din(31 downto temp_shift_val);
+        if temp_shift_val = 0 then
+            temp:=din;
+        else
+            if shift_lsl = '1' then
+                temp := din((31-temp_shift_val) downto 0) & zeros(temp_shift_val-1 downto 0);
+            elsif shift_lsr = '1' then
+                temp := zeros(temp_shift_val-1 downto 0) & din(31 downto temp_shift_val);
+            elsif shift_asr = '1' then 
+                if din(31) = '1' then
+                temp := not zeros(temp_shift_val-1 downto 0) & din(31 downto temp_shift_val);
+                else
+                temp := zeros(temp_shift_val-1 downto 0) & din(31 downto temp_shift_val);
+                end if;
+            elsif shift_ror = '1' then
+                temp := din(temp_shift_val-1 downto 0) & din(31  downto temp_shift_val);
+            elsif shift_rrx = '1' then
+                if temp_shift_val = 0 then
+                    temp := cin & din(31  downto temp_shift_val);
+                else 
+                    temp := din(temp_shift_val-2 downto 0) & cin & din(31  downto temp_shift_val);
+                end if ;
+                
             end if;
-        elsif shift_ror = '1' then
-            temp := din(temp_shift_val-1 downto 0) & din(31  downto temp_shift_val);
-        elsif shift_rrx = '1' then
-            temp := din(temp_shift_val-2 downto 0) & cin & din(31  downto temp_shift_val);
         end if;
-        
+            
     dout <= temp;
     cout <= temp(0);
     end process;

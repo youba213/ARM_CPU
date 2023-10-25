@@ -65,26 +65,26 @@ begin
     reset_n         => reset_n,
     vdd             => vdd,
     vss             => vss
-);
-    ck <= '0';
-    ck <= not ck after 4 ns;
+    );
+
+    
 process is
     begin
     -- Initialize inputs
     dec2exe_empty   <=  '0';
-    dec_op1         <= x"36321911";
-    dec_op2         <= x"11111111";
-    -- dec_exe_dest
-    -- dec_exe_wb
-    -- dec_flag_wb	
-    -- dec_mem_data
-    -- dec_mem_dest
+    dec_op1         <= x"00000001";
+    dec_op2         <= x"00000001";
+    dec_exe_dest    <=  x"0";
+    dec_exe_wb      <=  '0';
+    dec_flag_wb	    <=  '0';
+    dec_mem_data    <=  x"00000001";
+    dec_mem_dest    <= x"2";
     dec_pre_index   <=  '1';
-    -- dec_mem_lw
-    -- dec_mem_lb
-    -- dec_mem_sw
-    -- dec_mem_sb
-    dec_shift_lsl   <=  '0';
+    dec_mem_lw      <=  '1';
+    dec_mem_lb      <=  '0';
+    dec_mem_sw      <=  '0';
+    dec_mem_sb      <=  '0';
+    dec_shift_lsl   <=  '1';
     dec_shift_lsr   <=  '0';
     dec_shift_asr   <=  '0';
     dec_shift_ror   <=  '0';
@@ -95,19 +95,31 @@ process is
     dec_comp_op2    <=  '0';
     dec_alu_cy      <=  '0';
     dec_alu_cmd     <=  "00";
-    
-    -- reset_n
+    ck              <=  '0';
+    reset_n         <= '1';
     vdd             <= '1';
     vss             <= '0';
 
-    wait for 10 ns;
-    dec_alu_cmd     <=  "01";
-    dec_shift_lsl   <=  '0';
-    dec_shift_val   <=  "00000";
 
     wait for 10 ns;
+    dec_alu_cmd     <=  "00";
     dec_shift_lsl   <=  '0';
-    dec_shift_val   <=  "00010";
+    dec_shift_lsr   <=  '1';
+    dec_shift_val   <=  "00000";
+    ck              <= not ck ;
+
+    wait for 10 ns;
+    dec_shift_lsl   <=  '1';
+    dec_shift_lsr   <=  '0';
+    dec_shift_val   <=  "00000";
+    ck              <= not ck;
+
+    wait for 10 ns;
+    dec_alu_cmd     <=  "00";
+    dec_shift_lsl   <=  '0';
+    dec_shift_lsr   <=  '1';
+    dec_shift_val   <=  "00000";
+    ck              <= not ck ;
     wait;
 end process;
 end archi;

@@ -187,7 +187,7 @@ begin
 				vss		 => vss);
 
 	exec2mem : fifo_72b
-	port map (	din(71)	 => dec_mem_lw,
+	port map (		din(71)	 => dec_mem_lw,
 					din(70)	 => dec_mem_lb,
 					din(69)	 => dec_mem_sw,
 					din(68)	 => dec_mem_sb,
@@ -225,7 +225,7 @@ begin
 alu_in_op1 	<= dec_op1 		when dec_comp_op1 = '0' else not(dec_op1);
 alu_in_op2 	<= op2_shift 	when dec_comp_op2 = '0' else not(op2_shift);
 exe_res    	<= alu_res;
-exe_c 	   	<= alu_c ;
+exe_c 	   	<= alu_c;
 mem_adr 	<= dec_op1 		when dec_pre_index 	= '0' else alu_res;
 -- cout
 

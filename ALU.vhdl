@@ -34,25 +34,12 @@ begin
 		when others => result <= op1 xor op2;
 	end case;
 
-	-- if result(32) = '1' then
-	-- 	v <= '1' ;
-	-- else
-	-- 	v <= '0' ;
-	-- end if ;
-
-	if result = X"00000000" then
-		z <= '1';
-	else
-		z <= '0';
-	end if;
-	if result(31) = '1' then 
-		n <= '1' ;
-	else
-		n <= '0' ;
-	end if;
-
 end process; 
 res <= result;
+
+-- v 	<= '1' 		when result(32) = '1' else '0';
+n 	<= '1' 		when result(31) = '1' else '0';
+z 	<= '1' 		when result = X"00000000" else '0';
 
 end Archi;
 
