@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity exe is
 	port(
 	-- Decode interface synchro
-			dec2exe_empty	: in Std_logic;
+			dec2exe_empty	: in Std_logic;		
 			exe_pop			: out Std_logic;
 
 	-- Decode interface operands
@@ -46,20 +46,20 @@ entity exe is
 			exe_res			: out Std_Logic_Vector(31 downto 0);
 
 			exe_c				: out Std_Logic;	--exe carry
-			exe_v				: out Std_Logic;
-			exe_n				: out Std_Logic;
-			exe_z				: out Std_Logic;
+			exe_v				: out Std_Logic;	--exe overflow
+			exe_n				: out Std_Logic;	--exe negative
+			exe_z				: out Std_Logic;	--exe zero
 
 			exe_dest			: out Std_Logic_Vector(3 downto 0); -- Rd destination
 			exe_wb				: out Std_Logic; -- Rd destination write back
 			exe_flag_wb			: out Std_Logic; -- CSPR modifiy
 
 	-- Mem interface
-			exe_mem_adr		: out Std_Logic_Vector(31 downto 0); -- Alu res register
-			exe_mem_data	: out Std_Logic_Vector(31 downto 0);
+			exe_mem_adr		: out Std_Logic_Vector(31 downto 0); 	-- Alu res register
+			exe_mem_data	: out Std_Logic_Vector(31 downto 0);	
 			exe_mem_dest	: out Std_Logic_Vector(3 downto 0);
 
-			exe_mem_lw		: out Std_Logic;
+			exe_mem_lw		: out Std_Logic;	
 			exe_mem_lb		: out Std_Logic;
 			exe_mem_sw		: out Std_Logic;
 			exe_mem_sb		: out Std_Logic;
@@ -216,21 +216,22 @@ begin
 					vdd		 => vdd,
 					vss		 => vss);
 
-
-
-					-- synchro
---	mem_adr <= xxx;
-
 --  Signal assignment
+-- synchro
+--	mem_adr <= xxx;
+exe_pop 	<= NOT(dec2exe_empty) AND NOT(exe2mem_full); -- on fait un pop seulment si dec2exe_empty=0 et exe2mem_full=1
+exe_push 	<= NOT(dec2exe_empty) AND NOT(exe2mem_full) and (dec_mem_lw or dec_mem_lb or dec_mem_sw or dec_mem_sb) ;
+
+exe_c 		<= (dec_alu_cy AND alu_c) OR (NOT(alu_c) AND shift_c);
+--exe_c 	   	<= alu_c;
+
 alu_in_op1 	<= dec_op1 		when dec_comp_op1 = '0' else not(dec_op1);
 alu_in_op2 	<= op2_shift 	when dec_comp_op2 = '0' else not(op2_shift);
 exe_res    	<= alu_res;
-exe_c 	   	<= alu_c;
+exe_dest 	<= dec_exe_dest;
 mem_adr 	<= dec_op1 		when dec_pre_index 	= '0' else alu_res;
--- cout
 
--- ALU opearandes
-
--- Loop dec
-
+-- don't write back when no operation is done
+exe_wb 		<= dec_exe_wb and NOT(dec2exe_empty) AND NOT(exe2mem_full);
+exe_flag_wb <= dec_flag_wb and NOT(dec2exe_empty) AND NOT(exe2mem_full); 
 end Behavior;
