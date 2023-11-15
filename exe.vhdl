@@ -218,12 +218,11 @@ begin
 
 --  Signal assignment
 -- synchro
---	mem_adr <= xxx;
+--
 exe_pop 	<= NOT(dec2exe_empty) AND NOT(exe2mem_full); -- on fait un pop seulment si dec2exe_empty=0 et exe2mem_full=1
 exe_push 	<= NOT(dec2exe_empty) AND NOT(exe2mem_full) and (dec_mem_lw or dec_mem_lb or dec_mem_sw or dec_mem_sb) ;
 
 exe_c 		<= (dec_alu_cy AND alu_c) OR (NOT(alu_c) AND shift_c);
---exe_c 	   	<= alu_c;
 
 alu_in_op1 	<= dec_op1 		when dec_comp_op1 = '0' else not(dec_op1);
 alu_in_op2 	<= op2_shift 	when dec_comp_op2 = '0' else not(op2_shift);

@@ -15,6 +15,8 @@ ARCHITECTURE archi OF exe_tb IS
     SIGNAL exe_mem_dest, exe_dest, dec_mem_dest, dec_exe_dest : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL dec_alu_cmd : STD_LOGIC_VECTOR(1 DOWNTO 0);
     SIGNAL vdd, vss : BIT;
+
+    SIGNAL stim : STD_LOGIC_VECTOR(31 DOWNTO 0); -- random 32-bit stimulus
 BEGIN
     my_exe : ENTITY work.exe
         PORT MAP(
@@ -67,16 +69,16 @@ BEGIN
         );
 
     ck_process : PROCESS
-    VARIABLE count : INTEGER := 0;
+        VARIABLE count : INTEGER := 0;
     BEGIN
         ck <= '0';
         WAIT FOR 5 ns;
         ck <= '1';
         WAIT FOR 5 ns;
-    count := count + 1;
-    if count >= 20 then
-        wait;
-    end if;
+        count := count + 1;
+        IF count >= 20 THEN
+            WAIT;
+        END IF;
     END PROCESS ck_process;
 
     --always:
@@ -95,15 +97,26 @@ BEGIN
     reset_n <= '1';
     vdd <= '1';
     vss <= '0';
-    
-    procedure UNIFORM(variable SEED1, SEED2 : inout POSITIVE;
-                      variable X : out REAL);
+
     test_process : PROCESS (ck)
+        VARIABLE seed1: INTEGER := 1;
+        VARIABLE seed2: INTEGER := 5;
+        VARIABLE seed3: INTEGER := 6;
+        VARIABLE seed4: INTEGER := 11;
+        VARIABLE rand_op1,rand_op2 : real;
+        VARIABLE int_rand_op1,int_rand_op2 : INTEGER;
     BEGIN
+        uniform(seed1, seed2, rand_op1); -- generate random number
+        uniform(seed3, seed4, rand_op2);
+        -- rescale to 0..4294967295, find integer part
+        int_rand_op1 := INTEGER(trunc(rand_op1 * 294929766.0));
+        int_rand_op2 := INTEGER(trunc(rand_op2 * 294967296.0));
+        -- convert to std_logic_vector
+        --stim <= STD_LOGIC_VECTOR(to_unsigned(int_rand1, 32));
         IF rising_edge(ck) THEN
 
-            dec_op1 <= x"00000002";
-            dec_op2 <= x"00000002";
+            dec_op1 <= STD_LOGIC_VECTOR(to_unsigned(int_rand_op1, 32));
+            dec_op2 <= STD_LOGIC_VECTOR(to_unsigned(int_rand_op2, 32));
 
             dec_pre_index <= '1';
 
@@ -118,9 +131,7 @@ BEGIN
             dec_comp_op2 <= '0';
             dec_alu_cy <= '0';
             dec_alu_cmd <= "00";
-            report "__________________________________________________";
+            REPORT "__________________________________________________";
         END IF;
     END PROCESS test_process;
-
-    
 END archi;
