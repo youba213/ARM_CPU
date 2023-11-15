@@ -89,7 +89,7 @@ BEGIN
 
     dec_mem_data <= x"00000000";
     dec_mem_dest <= x"0";
-    dec_mem_lw <= '0';
+    dec_mem_lw <= '1';
     dec_mem_lb <= '0';
     dec_mem_sw <= '0';
     dec_mem_sb <= '0';
@@ -109,8 +109,8 @@ BEGIN
         uniform(seed1, seed2, rand_op1); -- generate random number
         uniform(seed3, seed4, rand_op2);
         -- rescale to 0..4294967295, find integer part
-        int_rand_op1 := INTEGER(trunc(rand_op1 * 294929766.0));
-        int_rand_op2 := INTEGER(trunc(rand_op2 * 294967296.0));
+        int_rand_op1 := INTEGER(trunc(rand_op1 * 1294929766.0));
+        int_rand_op2 := INTEGER(trunc(rand_op2 * 1294967296.0));
         -- convert to std_logic_vector
         --stim <= STD_LOGIC_VECTOR(to_unsigned(int_rand1, 32));
         IF rising_edge(ck) THEN
@@ -120,17 +120,17 @@ BEGIN
 
             dec_pre_index <= '1';
 
-            dec_shift_lsl <= '1';
-            dec_shift_lsr <= '0';
+            dec_shift_lsl <= '0';
+            dec_shift_lsr <= '1';
             dec_shift_asr <= '0';
             dec_shift_ror <= '0';
             dec_shift_rrx <= '0';
             dec_shift_val <= "00000";
             dec_cy <= '0';
-            dec_comp_op1 <= '0';
-            dec_comp_op2 <= '0';
+            dec_comp_op1 <= '1';
+            dec_comp_op2 <= '1';
             dec_alu_cy <= '0';
-            dec_alu_cmd <= "00";
+            dec_alu_cmd <= "01";
             REPORT "__________________________________________________";
         END IF;
     END PROCESS test_process;

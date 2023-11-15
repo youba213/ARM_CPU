@@ -17,7 +17,7 @@ entity Alu is
 end Alu;
 
 architecture Archi of ALU is 
-signal result: Std_Logic_Vector(31 downto 0);
+signal result: Std_Logic_Vector(32 downto 0);
 begin 
 
 	process (cmd,op1,op2)
@@ -26,21 +26,21 @@ begin
 
 		when "00" => 	
 			if cin = '1' then
-				result <= Std_Logic_Vector(unsigned(op1) + unsigned(op2) + 1);
-			else result <= Std_Logic_Vector(unsigned(op1) + unsigned(op2) + 0);
+				result <= Std_Logic_Vector(unsigned('0' & op1) + unsigned('0' & op2) + 1);
+			else result <= Std_Logic_Vector(unsigned('0' & op1) + unsigned('0' & op2) + 0);
 			end if;
-		when "01" => result <= op1 and op2;
-		when "10" => result <= op1 or op2;
-		when others => result <= op1 xor op2;
+		when "01" => result <= '0' & (op1 and op2);
+		when "10" => result <= '0' & (op1 or op2);
+		when others => result <= '0' & (op1 xor op2);
 	end case;
 
 end process; 
-res <= result;
+res <= result(31 downto 0);
 
--- v 	<= '1' 		when result(32) = '1' else '0';
+v   <= '1' 		when result(32) = '1' else '0';
 n 	<= '1' 		when result(31) = '1' else '0';
-z 	<= '1' 		when result = X"00000000" else '0';
-
+z 	<= '1' 		when result(31 downto 0) = X"00000000" else '0';
+cout <= result(32); 
 end Archi;
 
 -- cmd = '00'  	addition

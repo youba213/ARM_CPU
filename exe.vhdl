@@ -223,10 +223,10 @@ exe_pop 	<= NOT(dec2exe_empty) AND NOT(exe2mem_full); -- on fait un pop seulment
 exe_push 	<= NOT(dec2exe_empty) AND NOT(exe2mem_full) and (dec_mem_lw or dec_mem_lb or dec_mem_sw or dec_mem_sb) ;
 
 exe_c 		<= (dec_alu_cy AND alu_c) OR (NOT(alu_c) AND shift_c);
-
 alu_in_op1 	<= dec_op1 		when dec_comp_op1 = '0' else not(dec_op1);
 alu_in_op2 	<= op2_shift 	when dec_comp_op2 = '0' else not(op2_shift);
 exe_res    	<= alu_res;
+--dec_mem_data <= exe_res when ;
 exe_dest 	<= dec_exe_dest;
 mem_adr 	<= dec_op1 		when dec_pre_index 	= '0' else alu_res;
 

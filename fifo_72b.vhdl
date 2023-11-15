@@ -6,7 +6,6 @@ ENTITY fifo_72b IS
 		din		: in std_logic_vector(71 downto 0);
 		dout		: out std_logic_vector(71 downto 0);
 
-		-- commaUn mod`ele vide de la ﬁfo va vous etre fourninds
 		push		: in std_logic;
 		pop		: in std_logic;
 
@@ -23,7 +22,7 @@ END fifo_72b;
 
 architecture archi of fifo_72b is
 signal fifo_d : std_logic_vector(71 downto 0);
-signal fifo_v : std_logic;
+signal fifo_v : std_logic:='0';
 
 	begin
 
@@ -40,11 +39,13 @@ signal fifo_v : std_logic;
 								fifo_d <= din;
 							end if;
 						else 
-							if (pop = '1') && (push = '0') then 
+							if (pop = '1') then
+								if (push = '0') then	 
 							-- si on fait un pop alors que on pas fait de push la fifo devient invalide							
-								fifo_v <= '0'
-							elsif (pop = '1') && (push = '1') then 
-								fifo_d <= din;
+									fifo_v <= '0';
+								elsif (push = '1') then
+									fifo_d <= din;
+								end if;
 							end if;
 						end if;
 					end if;
