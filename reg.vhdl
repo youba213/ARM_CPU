@@ -67,6 +67,45 @@ entity Reg is
 end Reg;
 
 architecture Behavior OF Reg is
-type reg_array is array (0 to 15) of std_logic_vector(31 downto 0)
+type reg_array is array (0 to 15) of std_logic_vector(31 downto 0);
+signal c,z,n,ovr,ovr_valid,czn_valid: std_logic;
+signal bits_valid: std_logic_vector(15 downto 0);
+
+write_regs: process (ck,reset_n)
+	variable reg_var: reg_array;
+
+if raising_edge(ck) then
+	if (reset_n = '0') then
+		for i in 0 to 15 loop:
+			reg_var(i)= X"00000000";
+		end loop;
+		c <= '0';
+		z <= '0';
+		n <= '0';
+		ovr <= '0';
+		czn_valid <= '1';
+		ovr_valid <= '1';
+		bits_valid <= X"FFFF";
+	else
+		if (wadr1=wadr2) then 
+			reg_var(unsigned(wadr1)) = wdata1;
+			valid_var(unsigned(wadr1)) = '1';
+		else 
+			reg_var(unsigned(wadr1)) = wdata1;
+			valid_var(unsigned(wadr1)) = '1';
+			reg_var(unsigned(wadr2)) = wdata2;
+			valid_var(unsigned(wadr2)) = '1';
+		end if;
+		if(inval1)
+		valid_var (unsigned(inval_adr1)) = '0';
+		valid_var (unsigned(inval_adr2)) = '0';
+
+	end
+
+end process
+
+
 
 end Behavior;
+
+
