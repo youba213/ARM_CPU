@@ -68,8 +68,8 @@ end Reg;
 
 architecture Behavior OF Reg is
 type reg_array is array (0 to 15) of std_logic_vector(31 downto 0);
-signal c,z,n,ovr,ovr_valid,czn_valid: std_logic;
-signal bits_valid: std_logic_vector(15 downto 0);
+signal c,z,n,v,vv,cznv,pcv: std_logic;
+signal valid_reg: std_logic_vector(15 downto 0);
 
 write_regs: process (ck,reset_n)
 	variable reg_var: reg_array;
@@ -82,25 +82,106 @@ if raising_edge(ck) then
 		c <= '0';
 		z <= '0';
 		n <= '0';
-		ovr <= '0';
-		czn_valid <= '1';
-		ovr_valid <= '1';
-		bits_valid <= X"FFFF";
-	else
-		if (wadr1=wadr2) then 
-			reg_var(unsigned(wadr1)) = wdata1;
-			valid_var(unsigned(wadr1)) = '1';
-		else 
-			reg_var(unsigned(wadr1)) = wdata1;
-			valid_var(unsigned(wadr1)) = '1';
-			reg_var(unsigned(wadr2)) = wdata2;
-			valid_var(unsigned(wadr2)) = '1';
-		end if;
-		if(inval1)
-		valid_var (unsigned(inval_adr1)) = '0';
-		valid_var (unsigned(inval_adr2)) = '0';
+		v <= '0';
+		pcv <= '0';
+		cznv <= '1';
+		vv <= '1';
+		valid_reg <= X"FFFF";
+	else 
 
-	end
+---------------------------------------------- czn ------------------------------------
+		if (cznv = '1') then
+			if (inval_czn ='1') then
+				cznv <= '0';
+			end if;
+		else
+			if (inval_czn ='0') then
+				if (cspr_wb = '1') then	--cspar_wb enable les flags si =1
+					cznv <= '1';
+				end if;
+			end if;
+		end if;
+
+		--write data czn
+		if (cznv = '0') then
+			if (cspr_wb = '1') then
+					c <= wcry;
+					z <= wzero;
+					n <= wneg;
+			end if;
+		end if;
+---------------------------------------------- ovr ------------------------------------
+		if (vv = '1') then
+			if (inval_ovr ='1') then
+				vv <= '0';
+			end if;
+		else
+			if (inval_ovr ='0') then
+				if (cspr_wb = '1') then
+					vv <= '1';
+				end if;
+			end if;
+		end if;
+	
+		--write data v
+		if (vv = '0') then
+			if (cspr_wb = '1') then
+					v <= wovr;	
+			end if;
+		else
+	------------------------------------------------- regs ----------------------------------------
+		-- si c'est la meme addrese on prend la 1er qui correspond a exec sinon on prend les deux
+		-- si inval=1 on invalide 
+			
+		if (wadr1=wadr2) then 
+			if(inval1 = '1') then
+				valid_reg(unsigned(inval_adr1)) = '0';
+			end if;
+
+			--write data
+			if((wen1 = '1') and valid_reg(unsigned(wadr1)))then
+				reg_var(unsigned(wadr1)) = wdata1;
+			end if;
+			
+		else 
+			if(inval1 = '1') then
+				valid_reg(unsigned(inval_adr1)) = '0';
+			
+			end if;
+
+			if(inval2 = '1') then
+				valid_reg(unsigned(inval_adr2)) = '0';
+			end if;
+
+			--write data
+			if((wen1 = '1') and valid_reg(unsigned(wadr1)))then
+				reg_var(unsigned(wadr1)) = wdata1;
+			end if;
+
+			if((wen2 = '1') and valid_reg(unsigned(wadr2))) then;
+				reg_var(unsigned(wadr2)) = wdata2;
+			end if;
+		end if;
+
+---------------------------------------------------- pc --------------------------------------------
+		if (pcv = '1') then
+			if ((inval1 ='1' and inval_adr2 = x"F") or (inval2 ='1' and inval_adr2 = x"F")) then
+				pcv <= '0';
+			end if;
+		else
+			if ((wen1 = '1' and wadr1 = x"F") or (wen2 = '1' and wadr2 = x"F")) then
+				pcv <= '1';
+			end if;
+		end if;
+
+		--write data		
+		if ((inc_pc = '1') and (reg_pcv = '1')) then 
+			pc_int := to_integer(signed(reg_var(15)));				--convert to unsigned
+			pc_int := pc_int + 4;									--add 4
+			pc_33_bits := std_logic_vector(to_signed(pc_int, 33));	--convert to std_vector
+			reg_var(15) := pc_33_bits(31 downto 0); 				--new pc
+        end if;		
+	end if;
 
 end process
 
