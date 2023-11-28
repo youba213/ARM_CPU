@@ -13,3 +13,8 @@ gtkwav  exe.vcd
 ghdl
 make
 gtkwave
+
+## problemes rencontres 
+alignement d'un end if a coute tres cher 
+
+https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/condition-codes-1-condition-flags-and-codes

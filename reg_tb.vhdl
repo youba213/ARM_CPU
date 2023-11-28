@@ -68,14 +68,9 @@ BEGIN
             WAIT;
         END IF;
 end process;
-------------------------------------------- init --------------------------
-    wdata1      <= X"00000001";
-    wadr1       <= X"1";
-    wen1        <= '0';
+------------------------------------------- allways --------------------------
 
--- Write Port 2 non prioritaire
-    wdata2	    <= X"00000001";
-    wadr2	    <= X"2";
+    wen1        <= '1';  -- write enable 
     wen2	    <= '1';
 
 -- Write CSPR Port
@@ -84,17 +79,6 @@ end process;
     wneg	    <= '1';
     wovr	    <= '0';
     cspr_wb		<= '1';
-    
--- Read Port 1 32 bits
-
-    radr1		<= X"1";
-
--- Read Port 2 32 bits
- 
-    radr2		<= X"2";
-
--- Read Port 3 32 bits
-    radr3		<= X"F";
     
 -- Invalidate Port 
     inval_adr1	<= X"1";
@@ -114,6 +98,42 @@ end process;
     vss         <= '0';
     reset_n		<= '0' , '1' after 10 ns;
 ------------------------------------------------------------------
+
+
+test_process: process(ck)
+	
+variable seed1,seed2: integer := 999; -- Exemple de valeur initiale
+impure function rand_slv(len : integer) return std_logic_vector is
+    variable r : real;
+    variable slv : std_logic_vector(len - 1 downto 0);
+  begin
+    for i in slv'range loop
+        uniform(seed1, seed2, r);
+        if r > 0.5 then
+        slv(i) := '1';
+        else
+        slv(i) := '0';
+        end if;
+    end loop;
+    return slv;
+  end function;
+begin
+IF rising_edge(ck) THEN
+
+    wdata1 <= rand_slv(32);
+    wdata2 <= rand_slv(32);
+    wadr1  <= rand_slv(4);
+    wadr2  <= rand_slv(4);
+    radr1  <= wadr1;
+    radr2  <= wadr2;
+    radr3  <= rand_slv(4);
+    
+end if;
+
+end process test_process;
+
+
+
 
 end archi;
 

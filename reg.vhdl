@@ -131,7 +131,7 @@ if rising_edge(ck) then
 			if (cspr_wb = '1') then
 					v <= wovr;	
 			end if;
-		else
+		end if;
 	------------------------------------------------- regs ----------------------------------------
 		-- si c'est la meme addrese on prend la 1er qui correspond a exec sinon on prend les deux
 		-- si inval=1 on invalide 
@@ -142,7 +142,7 @@ if rising_edge(ck) then
 			end if;
 
 			--write data
-			if((wen1 = '1') and (valid_reg(to_integer(unsigned(wadr1))) = '0'))then
+			if((wen1 = '1') and (valid_reg(to_integer(unsigned(wadr1))) = '1'))then
 				reg_var(to_integer(unsigned(wadr1))) <= wdata1;
 				valid_reg(to_integer(unsigned(inval_adr1))) <= '1';
 			end if;
@@ -180,7 +180,7 @@ if rising_edge(ck) then
 		end if;
 
 		--write data		
-		if ((inc_pc = '1') and (pcv = '1')) then 
+		if (inc_pc = '1') then 
 			pc_int := to_integer(signed(reg_var(15)));				--convert to unsigned
 			pc_int := pc_int + 4;									--add 4
 			pc_33_bits := std_logic_vector(to_signed(pc_int, 33));	--convert to std_vector
@@ -188,16 +188,19 @@ if rising_edge(ck) then
         end if;		
 	end if;
 end if;
-end if;
 end process;
 
 
 reg_rd1 <= reg_var(to_integer(unsigned(radr1)));
 reg_rd2 <= reg_var(to_integer(unsigned(radr2)));
 reg_rd3 <= reg_var(to_integer(unsigned(radr3)));
+reg_pc  <= reg_var(15);
+
 reg_v1	<= valid_reg(to_integer(unsigned(radr1)));
 reg_v2	<= valid_reg(to_integer(unsigned(radr2)));
 reg_v3	<= valid_reg(to_integer(unsigned(radr3)));
+reg_pcv <= pcv;
+
 reg_cry	<= 	c;
 reg_zero<= 	z;
 reg_neg	<=  n;
