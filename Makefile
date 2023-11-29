@@ -15,6 +15,15 @@ reg: reg.vhdl reg_tb.vhdl
 	ghdl -e -v reg_tb
 	ghdl -r reg_tb --vcd=reg.vcd
 
+dec: decod.vhdl decod_tb.vhdl
+	ghdl -a -v reg.vhdl
+	ghdl -a -v fifo_32b.vhdl
+	ghdl -a -v fifo_127b.vhdl
+	ghdl -a -v decod.vhdl
+	ghdl -a -v decod_tb.vhdl
+	ghdl -e -v decod_tb
+	ghdl -r decod_tb --vcd=decod.vcd
+
 clean:
 	rm -f exe_tb
 	rm -f exe.vcd

@@ -1,10 +1,10 @@
 LIBRARY ieee;
 use ieee.std_logic_1164.all;
 
-ENTITY fifo_172b IS
+ENTITY fifo_127b IS
 	PORT(
-		din		: in std_logic_vector(171 downto 0);
-		dout		: out std_logic_vector(171 downto 0);
+		din		: in std_logic_vector(126 downto 0);
+		dout		: out std_logic_vector(126 downto 0);
 
 		push		: in std_logic;
 		pop		: in std_logic;
@@ -18,10 +18,10 @@ ENTITY fifo_172b IS
 		vdd		: in bit;
 		vss		: in bit
 	);
-END fifo_172b;
+END fifo_127b;
 
-architecture archi of fifo_172b is
-signal fifo_d : std_logic_vector(171 downto 0);
+architecture archi of fifo_127b is
+signal fifo_d : std_logic_vector(126 downto 0);
 signal fifo_v : std_logic:='0';
 
 	begin
