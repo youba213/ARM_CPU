@@ -198,7 +198,7 @@ begin
 
     if_ir <= X"e1a04001";
 
-    if2dec_empty <= '1';  -- depuis ifc
+    if2dec_empty <= '0';  -- depuis ifc
     if_pop <= '1';        --depuis ifc 
 
     exe_res <= rand_slv(32);    --vers reg wdata1

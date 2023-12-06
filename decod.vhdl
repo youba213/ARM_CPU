@@ -420,7 +420,7 @@ begin
 				vss		 => vss);
 
 	reg_inst  : reg
-	port map(	wdata1		=> exe_res,
+	port map(		wdata1		=> exe_res,
 					wadr1			=> exe_dest,
 					wen1			=> exe_wb,
                                           
@@ -765,10 +765,10 @@ begin
 		mtrans_shift <= '0';
 		mtrans_loop_adr <= '0';
 --les conditions 
-		if dec2if_full = '0' and reg_pcv = '1' then		--T1
+		if dec2if_full = '0' and reg_pcv = '1' then		--T2
 			next_state <= RUN;
 			dec2if_push <= '1';
-		else 		--T2
+		else 		--T1
 			next_state <= FETCH;	
 			dec2if_push <= '0';
 		end if;

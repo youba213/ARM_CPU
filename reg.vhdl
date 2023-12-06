@@ -86,7 +86,7 @@ if rising_edge(ck) then
 		z <= '0';
 		n <= '0';
 		v <= '0';
-		pcv <= '0';
+		pcv <= '1';
 		cznv <= '1';
 		vv <= '1';
 		valid_reg <= X"FFFF";
@@ -180,11 +180,12 @@ if rising_edge(ck) then
 		end if;
 
 		--write data		
-		if (inc_pc = '1' and wadr1 /= x"F") then 
+		if (inc_pc = '1' ) then 
 			pc_int := to_integer(signed(reg_var(15)));				--convert to unsigned
 			pc_int := pc_int + 4;									--add 4
 			pc_33_bits := std_logic_vector(to_signed(pc_int, 33));	--convert to std_vector
 			reg_var(15) <= pc_33_bits(31 downto 0); 				--new pc
+			pcv <= '1';
         end if;		
 	end if;
 end if;
