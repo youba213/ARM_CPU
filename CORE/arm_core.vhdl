@@ -132,7 +132,7 @@ Component Decod
 			vss				: in bit);
 end Component;
 
-Component EXec
+Component EXe
 	port(
 	-- Decode interface synchro
 			dec2exe_empty	: in Std_logic;
@@ -393,7 +393,7 @@ begin
 					vdd	 			=> vdd,
 					vss	 			=> vss);
 
-	exec_i : exec
+	exec_i : exe
 	port map (
 	-- Decode interface synchro
 					dec2exe_empty	=> dec2exe_empty,
