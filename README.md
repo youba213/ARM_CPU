@@ -1,6 +1,6 @@
 # ARM_CPU
 ##private:
-token: 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
+
 
 ##public:
 ghdl -a -v exe.vhdl
