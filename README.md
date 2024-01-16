@@ -1,8 +1,15 @@
 # ARM_CPU
-##private:
-token: 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
+./main_tb Test/test_add --vcd=test.vcd
+arm-linux-gnu-objdump -d Test/test_add  Mon ficher test en arm avec les adresses
+ 
+```
+mkdir /dsk/l1/misc/ferhoune/Arm
+./main_tb Test/test_add --vcd=/dsk/l1/misc/ferhoune/Arm/test_add.vcd
+gtkwave /dsk/l1/misc/ferhoune/Arm/test_add.vcd
+```
 
-##public:
+## public:
+
 ghdl -a -v exe.vhdl
 ghdl -a -v exe_tb.vhdl
 ghdl -e -v exe_tb
@@ -30,3 +37,5 @@ T1: rester sur run tant que
     not(condv) 
 T2: 
     not(cond)
+
+./main_tb Test/test_add

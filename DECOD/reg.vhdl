@@ -92,7 +92,27 @@ if rising_edge(ck) then
 		valid_reg <= X"FFFF";
 	else 
 
----------------------------------------------- czn ------------------------------------
+	---------------------------------------------------- pc --------------------------------------------
+		if (pcv = '1') then
+			if ((inval1 ='1' and inval_adr1 = x"F") or (inval2 ='1' and inval_adr2 = x"F")) then
+				pcv <= '0';
+			end if;
+		else
+			if ((wen1 = '1' and wadr1 = x"F") or (wen2 = '1' and wadr2 = x"F")) then
+				pcv <= '1';
+			end if;
+		end if;
+
+		--write data	
+		if (inc_pc = '1' ) then 
+			pc_int := to_integer(signed(reg_var(15)));				--convert to unsigned
+			pc_int := pc_int + 4;									--add 4
+			pc_33_bits := std_logic_vector(to_signed(pc_int, 33));	--convert to std_vector
+			reg_var(15) <= pc_33_bits(31 downto 0); 				--new pc
+			pcv <= '1';
+		end if;	
+
+	---------------------------------------------- czn ------------------------------------
 		if (cznv = '1') then
 			if (inval_czn ='1') then
 				cznv <= '0';
@@ -166,27 +186,7 @@ if rising_edge(ck) then
 				reg_var(to_integer(unsigned(wadr2))) <= wdata2;
 				valid_reg(to_integer(unsigned(inval_adr2))) <= '1';
 			end if;
-		end if;
-
----------------------------------------------------- pc --------------------------------------------
-		if (pcv = '1') then
-			if ((inval1 ='1' and inval_adr1 = x"F") or (inval2 ='1' and inval_adr2 = x"F")) then
-				pcv <= '0';
-			end if;
-		else
-			if ((wen1 = '1' and wadr1 = x"F") or (wen2 = '1' and wadr2 = x"F")) then
-				pcv <= '1';
-			end if;
-		end if;
-
-		--write data		
-		if (inc_pc = '1' ) then 
-			pc_int := to_integer(signed(reg_var(15)));				--convert to unsigned
-			pc_int := pc_int + 4;									--add 4
-			pc_33_bits := std_logic_vector(to_signed(pc_int, 33));	--convert to std_vector
-			reg_var(15) <= pc_33_bits(31 downto 0); 				--new pc
-			pcv <= '1';
-        end if;		
+		end if;	
 	end if;
 end if;
 end process;

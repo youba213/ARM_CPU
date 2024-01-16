@@ -1,7 +1,7 @@
 GHDL=ghdl
 #GHDL=/usr/bin/ghdl
 GHDL_OP = -v
-C_MOD_DIR = /C_model
+C_MOD_DIR = C_model
 all : main_tb
 
 ram.o : ram.vhdl
@@ -16,7 +16,7 @@ dcache.o : dcache.vhdl ram.o
 main_tb.o : main_tb.vhdl icache.o dcache.o ram.o 
 	${GHDL} -a ${GHDL_OP} main_tb.vhdl
 
-arm_core.o : CORE/arm_core.vhdl ifetch.o decod.o exec.o mem.o
+arm_core.o : CORE/arm_core.vhdl ifetch.o decod.o exe.o mem.o
 	${GHDL} -a ${GHDL_OP} CORE/arm_core.vhdl
 	
 ifetch.o : IFETCH/ifetch.vhdl fifo_32b.o
@@ -28,8 +28,8 @@ decod.o : DECOD/decod.vhdl fifo_32b.o fifo_127b.o reg.o
 reg.o : DECOD/reg.vhdl 
 	${GHDL} -a ${GHDL_OP} DECOD/reg.vhdl
 
-exec.o : EXEC/exec.vhdl fifo_72b.o alu.o shifter.o
-	${GHDL} -a ${GHDL_OP} EXEC/exec.vhdl
+exe.o : EXEC/exe.vhdl fifo_72b.o alu.o shifter.o
+	${GHDL} -a ${GHDL_OP} EXEC/exe.vhdl
 
 fifo_72b.o : EXEC/fifo_72b.vhdl
 	${GHDL} -a ${GHDL_OP} EXEC/fifo_72b.vhdl

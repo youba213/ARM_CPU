@@ -337,94 +337,94 @@ signal debug_state : Std_Logic_Vector(3 downto 0) := X"0";
 begin
 
 	dec2exec : fifo_127b
-	port map (	din(126) => pre_index,
-					din(125 downto 94) => op1,
-					din(93 downto 62)	 => op2,
-					din(61 downto 58)	 => alu_dest,
-					din(57)	 => alu_wb,
-					din(56)	 => flag_wb,
+	port map (		din(126) 				=> pre_index,
+					din(125 downto 94) 		=> op1,
+					din(93 downto 62)	 	=> op2,
+					din(61 downto 58)	 	=> alu_dest,
+					din(57)	 				=> alu_wb,
+					din(56)	 				=> flag_wb,
 
-					din(55 downto 24)	 => rdata3,
-					din(23 downto 20)	 => ld_dest,
-					din(19)	 => mem_lw,
-					din(18)	 => mem_lb,
-					din(17)	 => mem_sw,
-					din(16)	 => mem_sb,
+					din(55 downto 24)	 	=> rdata3,
+					din(23 downto 20)	 	=> ld_dest,
+					din(19)	 				=> mem_lw,
+					din(18)	 				=> mem_lb,
+					din(17)	 				=> mem_sw,
+					din(16)	 				=> mem_sb,
 
-					din(15)	 => shift_lsl,
-					din(14)	 => shift_lsr,
-					din(13)	 => shift_asr,
-					din(12)	 => shift_ror,
-					din(11)	 => shift_rrx,
-					din(10 downto 6)	 => shift_val,
-					din(5)	 => cry,
+					din(15)	 				=> shift_lsl,
+					din(14)	 				=> shift_lsr,
+					din(13)	 				=> shift_asr,
+					din(12)	 				=> shift_ror,
+					din(11)	 				=> shift_rrx,
+					din(10 downto 6)	 	=> shift_val,
+					din(5)	 				=> cry,
 
-					din(4)	 => comp_op1,
-					din(3)	 => comp_op2,
-					din(2)	 => alu_cy,
+					din(4)	 				=> comp_op1,
+					din(3)	 				=> comp_op2,
+					din(2)	 				=> alu_cy,
 
-					din(1 downto 0)	 => alu_cmd,
+					din(1 downto 0)	 		=> alu_cmd,
 
-					dout(126)	 => dec_pre_index,
-					dout(125 downto 94)	 => dec_op1,
-					dout(93 downto 62)	 => dec_op2,
-					dout(61 downto 58)	 => dec_exe_dest,
-					dout(57)	 => dec_exe_wb,
-					dout(56)	 => dec_flag_wb,
+					dout(126)	 			=> dec_pre_index,
+					dout(125 downto 94)	 	=> dec_op1,
+					dout(93 downto 62)	 	=> dec_op2,
+					dout(61 downto 58)	 	=> dec_exe_dest,
+					dout(57)	 			=> dec_exe_wb,
+					dout(56)	 			=> dec_flag_wb,
 
-					dout(55 downto 24)	 => dec_mem_data,
-					dout(23 downto 20)	 => dec_mem_dest,
-					dout(19)	 => dec_mem_lw,
-					dout(18)	 => dec_mem_lb,
-					dout(17)	 => dec_mem_sw,
-					dout(16)	 => dec_mem_sb,
+					dout(55 downto 24)	 	=> dec_mem_data,
+					dout(23 downto 20)	 	=> dec_mem_dest,
+					dout(19)	 			=> dec_mem_lw,
+					dout(18)	 			=> dec_mem_lb,
+					dout(17)	 			=> dec_mem_sw,
+					dout(16)	 			=> dec_mem_sb,
 
-					dout(15)	 => dec_shift_lsl,
-					dout(14)	 => dec_shift_lsr,
-					dout(13)	 => dec_shift_asr,
-					dout(12)	 => dec_shift_ror,
-					dout(11)	 => dec_shift_rrx,
-					dout(10 downto 6)	 => dec_shift_val,
-					dout(5)	 => dec_cy,
+					dout(15)	 			=> dec_shift_lsl,
+					dout(14)	 			=> dec_shift_lsr,
+					dout(13)	 			=> dec_shift_asr,
+					dout(12)	 			=> dec_shift_ror,
+					dout(11)	 			=> dec_shift_rrx,
+					dout(10 downto 6)	 	=> dec_shift_val,
+					dout(5)	 				=> dec_cy,
 
-					dout(4)	 => dec_comp_op1,
-					dout(3)	 => dec_comp_op2,
-					dout(2)	 => dec_alu_cy,
+					dout(4)	 				=> dec_comp_op1,
+					dout(3)	 				=> dec_comp_op2,
+					dout(2)	 				=> dec_alu_cy,
 
-					dout(1 downto 0)	 => dec_alu_cmd,
+					dout(1 downto 0)	 	=> dec_alu_cmd,
 
-					push		 => dec2exe_push,
-					pop		 => exe_pop,
-
-					empty		 => dec2exe_empty,
-					full		 => dec2exe_full,
-
-					reset_n	 => reset_n,
-					ck			 => ck,
-					vdd		 => vdd,
-					vss		 => vss);
+					push		 			=> dec2exe_push,
+					pop		 				=> exe_pop,
+		
+					empty		 			=> dec2exe_empty,
+					full		 			=> dec2exe_full,
+		
+					reset_n	 				=> reset_n,
+					ck			 			=> ck,
+					vdd		 				=> vdd,
+					vss		 				=> vss);
 
 	dec2if : fifo_32b
-	port map (	din	=> reg_pc,
-				dout	=> dec_pc,
+	port map (		din				=> reg_pc,
+					dout			=> dec_pc,
 
-				push		 => dec2if_push,
-				pop		 => if_pop,
+					push		 	=> dec2if_push,
+					pop		 		=> if_pop,
 
-				empty		 => dec2if_empty,
-				full		 => dec2if_full,
+					empty		 	=> dec2if_empty,
+					full		 	=> dec2if_full,
 
-				reset_n	 => reset_n,
-				ck			 => ck,
-				vdd		 => vdd,
-				vss		 => vss);
+					reset_n	 		=> reset_n,
+					ck			 	=> ck,
+					vdd		 		=> vdd,
+					vss		 		=> vss);
 
 	reg_inst  : reg
-	port map(		wdata1		=> exe_res,
+	port map(		wdata1			=> exe_res,
 					wadr1			=> exe_dest,
 					wen1			=> exe_wb,
                                           
-					wdata2		=> mem_res,
+					wdata2			=> mem_res,
 					wadr2			=> mem_dest,
 					wen2			=> mem_wb,
                                           
@@ -432,45 +432,45 @@ begin
 					wzero			=> exe_z,
 					wneg			=> exe_n,
 					wovr			=> exe_v,
-					cspr_wb		=> exe_flag_wb,
-					               
-					reg_rd1		=> rdata1,
+					cspr_wb			=> exe_flag_wb,
+
+					reg_rd1			=> rdata1,
 					radr1			=> radr1,
-					reg_v1		=> rvalid1,
-                                          
-					reg_rd2		=> rdata2,
+					reg_v1			=> rvalid1,
+	
+					reg_rd2			=> rdata2,
 					radr2			=> radr2,
-					reg_v2		=> rvalid2,
-                                          
-					reg_rd3		=> rdata3,
+					reg_v2			=> rvalid2,
+	
+					reg_rd3			=> rdata3,
 					radr3			=> radr3,
-					reg_v3		=> rvalid3,
-                                          
-					reg_cry		=> cry,
-					reg_zero		=> zero,
-					reg_neg		=> neg,
-					reg_ovr		=> ovr,
-					               
-					reg_cznv		=> reg_cznv,
-					reg_vv		=> reg_vv,
-                                          
-					inval_adr1	=> inval_exe_adr,
-					inval1		=> inval_exe,
-                                          
-					inval_adr2	=> inval_mem_adr,
-					inval2		=> inval_mem,
-                                          
-					inval_czn	=> inval_czn,
-					inval_ovr	=> inval_ovr,
-                                          
-					reg_pc		=> reg_pc,
-					reg_pcv		=> reg_pcv,
-					inc_pc		=> inc_pc,
-				                              
+					reg_v3			=> rvalid3,
+	
+					reg_cry			=> cry,
+					reg_zero			=> zero,
+					reg_neg			=> neg,
+					reg_ovr			=> ovr,
+
+					reg_cznv			=> reg_cznv,
+					reg_vv			=> reg_vv,
+	
+					inval_adr1		=> inval_exe_adr,
+					inval1			=> inval_exe,
+	
+					inval_adr2		=> inval_mem_adr,
+					inval2			=> inval_mem,
+	
+					inval_czn		=> inval_czn,
+					inval_ovr		=> inval_ovr,
+	
+					reg_pc			=> reg_pc,
+					reg_pcv			=> reg_pcv,
+					inc_pc			=> inc_pc,
+
 					ck				=> ck,
-					reset_n		=> reset_n,
-					vdd			=> vdd,
-					vss			=> vss);
+					reset_n			=> reset_n,
+					vdd				=> vdd,
+					vss				=> vss);
 
 -- Execution condition
 
@@ -562,12 +562,12 @@ begin
 
 
 -- Decode interface operands
-	op1 <=	reg_pc		when branch_t = '1'					else
+	op1 <=	reg_pc		when branch_t = '1'					else	
 			X"00000000" when mov_i = '1' or mvn_i = '1'		else
 			exe_res	 	when mtrans_loop_adr = '1'          else
 			rdata1;
 
-	offset32 <=	X"FF" & if_ir(23 downto 0) when if_ir(23) = '1' else
+	offset32 <=	X"FF" & if_ir(23 downto 0) when if_ir(23) = '1' else	-- extension de signe
 			    X"00" & if_ir(23 downto 0);
 
 	op2	<=  X"00000001" 		           		when blink = '1'  	else
@@ -616,7 +616,7 @@ begin
 	-- inval_mem <=	'1'	when		....		else
 	-- 					'0';
 
-	-- inval_czn <=
+	-- inval_czn <=MP 
 			
 
 	-- inval_ovr <=
@@ -681,7 +681,7 @@ begin
 				"10" when orr_i = '1' 			else
 				"01" when and_i = '1' or tst_i = '1' or bic_i = '1' else 
 				"00";
--- Mtrans reg list
+-- Mtrans reg listMP 
 
 	process (ck)
 	begin
@@ -826,6 +826,15 @@ begin
 
 	when LINK =>
 	when BRANCH =>
+			debug_state <= X"4";		
+			if(if2dec_empty = '0')	then					    -- Si fifo d'instructions n'est pas vide, on va traiter ça avec run
+				next_state <= Run;
+			else
+				dec2if_push <= '0';
+				dec2exe_push <= '0';
+				if2dec_pop <= '0';
+			end if;
+			
 	when MTRANS =>		
 
 	
