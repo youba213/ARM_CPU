@@ -63,5 +63,4 @@ Ci-dessous, vous trouverez un extrait de code écrit en langage assembleur ARM, 
 
 ![Validation](IMG/gtkwave.png)
 
-![image](https://hackmd.io/_uploads/BktkDgebJl.png)
 
